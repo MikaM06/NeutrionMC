@@ -10,8 +10,15 @@ buildscript {
             name 'forge'
             url 'https://maven.minecraftforge.net/'
         }
+        maven {
+            name 'forgefiles'
+            url 'https://files.minecraftforge.net/maven'
+        }
     }
     dependencies {
+        // NOTE: buildSrc exposes this exact ForgeGradle as an `api` dependency; the crucible
+        // plugin extends its internals. Do NOT swap this for FG 2.x here — the 1.8.9 support
+        // has to be implemented inside buildSrc (see the porting plan).
         classpath 'com.anatawa12.forge:ForgeGradle:1.2-1.1.0'
     }
 }
@@ -45,11 +52,12 @@ repositories {
 }
 
 minecraft {
-    version = '1.7.10'
-    mcpVersion = '9.08'
-    mainClass = 'cpw.mods.fml.relauncher.ServerLaunchWrapper'
-    tweakClass = 'cpw.mods.fml.common.launcher.FMLTweaker'
-    installerVersion = "1.4"
+    version = '1.8.9'
+    mcpVersion = '9.19' // MCP data for 1.8.9 (9.10 is 1.8.0) — TODO: verify the artifact exists where FG 1.2 looks for it
+    // FML moved from cpw.mods.fml to net.minecraftforge.fml in 1.8+
+    mainClass = 'net.minecraftforge.fml.relauncher.ServerLaunchWrapper'
+    tweakClass = 'net.minecraftforge.fml.common.launcher.FMLTweaker'
+    installerVersion = "1.5"
 
     // Repos used on the generated subprojects
     repos = [
@@ -65,8 +73,8 @@ group = 'io.github.cruciblemc'
 
 ext.buildInfoCached = null
 ext.gitInfoCached = null
-ext.mcVersion = "1.7.10"
-ext.forgeVersion = "1614"
+ext.mcVersion = "1.8.9"
+ext.forgeVersion = "11.15.1.2318" // last Forge build for 1.8.9
 ext.revision = "1.0.7"
 var crucibleVersion = "5.4" // TODO: Not hardcode the version.
 if (gitInfo('branch') != "master") {
@@ -133,7 +141,10 @@ dependencies {
     libraries 'org.fusesource.jansi:jansi:1.11'
     libraries 'com.koloboke:koloboke-impl-jdk8:1.0.0'
     libraries 'java3d:vecmath:1.3.1'
-    libraries 'net.minecraft:server:1.7.10'
+    // TODO(port-1.8.9): this artifact only exists in the ThermosLibs maven for 1.7.10.
+    //  A net.minecraft:server:1.8.9 artifact must be published there (or resolved another way)
+    //  before packageServer can produce a runnable distribution.
+    libraries 'net.minecraft:server:1.8.9'
 }
 
 packageApi {
@@ -166,10 +177,11 @@ packageServer {
                 'Implementation-Version': project.version,
                 'Specification-Vendor'  : 'Bukkit Team',
                 'Specification-Title'   : 'Bukkit',
-                'Specification-Version' : '1.7.10-R0.1-SNAPSHOT',
-                'Forge-Version'         : '10.13.4.1614',
-                'TweakClass'            : 'cpw.mods.fml.common.launcher.FMLTweaker',
-                'Main-Class'            : 'cpw.mods.fml.relauncher.ServerLaunchWrapper',
+                // Spigot never shipped a 1.8.9 API revision; 1.8.8-R0.1 is the last 1.8.x Bukkit API
+                'Specification-Version' : '1.8.8-R0.1-SNAPSHOT',
+                'Forge-Version'         : '11.15.1.2318',
+                'TweakClass'            : 'net.minecraftforge.fml.common.launcher.FMLTweaker',
+                'Main-Class'            : 'net.minecraftforge.fml.relauncher.ServerLaunchWrapper',
                 'Class-Path'            : generateClasspath(),
                 'Crucible-Libs'         : generateMavenLibs()
         ])
@@ -198,9 +210,9 @@ tasks.register('packageLibraries', Zip) {
 
 publishing {
     publications {
-        crucible(MavenPublication) {
-            artifact packageApi
-            artifact packageJavadoc
+        create("crucible", MavenPublication) {
+            artifact(tasks.named("packageApi"))
+            artifact(tasks.named("packageJavadoc"))
         }
     }
     repositories {
