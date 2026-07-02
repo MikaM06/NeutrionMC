@@ -19,7 +19,7 @@ public final class Versioning {
         }
 
         return result;*/
-        return "1.7.10-R0.1-SNAPSHOT"; // return current Bukkit API version used
+        return "1.8.8-R0.1-SNAPSHOT"; // return current Bukkit API version used (Spigot never shipped a 1.8.9 API revision)
         // Cauldron end
     }
 }
