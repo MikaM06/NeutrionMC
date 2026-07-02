@@ -13,7 +13,9 @@ import io.github.cruciblemc.forgegradle.DevConstants;
 import net.minecraftforge.gradle.common.BaseExtension;
 import net.minecraftforge.gradle.common.Constants;
 import net.minecraftforge.gradle.delayed.DelayedFile;
-import net.minecraftforge.gradle.extrastuff.FFPatcher;
+// 1.8.9 port: local FFPatcher copy with a backtracking-safe SYNTHETICS regex
+// (the FG 1.2 original hangs forever on large 1.8.9 classes like EnumConnectionState)
+import io.github.cruciblemc.forgegradle.util.FFPatcher;
 import net.minecraftforge.gradle.extrastuff.FmlCleanup;
 import net.minecraftforge.gradle.extrastuff.GLConstantFixer;
 import net.minecraftforge.gradle.extrastuff.McpCleanup;
