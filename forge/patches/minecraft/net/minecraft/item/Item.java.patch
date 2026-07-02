@@ -1,66 +1,35 @@
 --- ../src-base/minecraft/net/minecraft/item/Item.java
 +++ ../src-work/minecraft/net/minecraft/item/Item.java
-@@ -7,10 +7,12 @@
- import cpw.mods.fml.common.registry.GameData;
- import cpw.mods.fml.relauncher.Side;
- import cpw.mods.fml.relauncher.SideOnly;
-+import java.util.HashMap;
- import java.util.HashSet;
- import java.util.Iterator;
- import java.util.List;
- import java.util.Random;
-+import java.util.Set;
- import java.util.UUID;
- import net.minecraft.block.Block;
- import net.minecraft.block.BlockDirt;
-@@ -27,13 +29,18 @@
- import net.minecraft.block.BlockWall;
- import net.minecraft.block.BlockWood;
- import net.minecraft.block.material.Material;
-+import net.minecraft.client.gui.FontRenderer;
-+import net.minecraft.client.gui.ScaledResolution;
-+import net.minecraft.client.model.ModelBiped;
- import net.minecraft.client.renderer.texture.IIconRegister;
- import net.minecraft.creativetab.CreativeTabs;
- import net.minecraft.entity.Entity;
- import net.minecraft.entity.EntityLivingBase;
-+import net.minecraft.entity.item.EntityItem;
- import net.minecraft.entity.item.EntityItemFrame;
- import net.minecraft.entity.item.EntityPainting;
- import net.minecraft.entity.player.EntityPlayer;
-+import net.minecraft.entity.player.EntityPlayerMP;
- import net.minecraft.init.Blocks;
- import net.minecraft.init.Items;
- import net.minecraft.potion.Potion;
-@@ -44,7 +51,10 @@
- import net.minecraft.util.RegistryNamespaced;
- import net.minecraft.util.StatCollector;
- import net.minecraft.util.Vec3;
-+import net.minecraft.util.WeightedRandomChestContent;
- import net.minecraft.world.World;
-+import net.minecraftforge.common.ChestGenHooks;
-+import net.minecraftforge.common.util.EnumHelper;
+@@ -48,8 +48,8 @@
  
  public class Item
  {
-@@ -64,7 +74,7 @@
-     protected String field_111218_cA;
-     private static final String __OBFID = "CL_00000041";
+-    public static final RegistryNamespaced<ResourceLocation, Item> field_150901_e = new RegistryNamespaced();
+-    private static final Map<Block, Item> field_179220_a = Maps.<Block, Item>newHashMap();
++    public static final RegistryNamespaced<ResourceLocation, Item> field_150901_e = net.minecraftforge.fml.common.registry.GameData.getItemRegistry();
++    private static final Map<Block, Item> field_179220_a = net.minecraftforge.fml.common.registry.GameData.getBlockItemMap();
+     protected static final UUID field_111210_e = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+     private CreativeTabs field_77701_a;
+     protected static Random field_77697_d = new Random();
+@@ -61,6 +61,9 @@
+     private String field_77785_bY;
+     private String field_77774_bZ;
  
--    public final cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate = 
-+    public final cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate =
-             ((cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry)field_150901_e).getDelegate(this, Item.class);
++    public final net.minecraftforge.fml.common.registry.RegistryDelegate<Item> delegate =
++            ((net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry)field_150901_e).getDelegate(this, Item.class);
++
      public static int func_150891_b(Item p_150891_0_)
      {
-@@ -450,6 +460,7 @@
+         return p_150891_0_ == null ? 0 : field_150901_e.func_148757_b(p_150891_0_);
+@@ -126,6 +129,7 @@
          return p_77654_1_;
      }
  
-+    @Deprecated
++    @Deprecated // Use ItemStack sensitive version below.
      public int func_77639_j()
      {
          return this.field_77777_bU;
-@@ -568,6 +579,7 @@
+@@ -239,6 +243,7 @@
          return this.field_77700_c;
      }
  
@@ -68,15 +37,7 @@
      public boolean func_77634_r()
      {
          return this.field_77700_c != null;
-@@ -625,6 +637,7 @@
-     }
- 
-     @SideOnly(Side.CLIENT)
-+    @Deprecated
-     public boolean func_77636_d(ItemStack p_77636_1_)
-     {
-         return p_77636_1_.func_77948_v();
-@@ -637,7 +650,7 @@
+@@ -316,7 +321,7 @@
  
      public boolean func_77616_k(ItemStack p_77616_1_)
      {
@@ -85,43 +46,32 @@
      }
  
      protected MovingObjectPosition func_77621_a(World p_77621_1_, EntityPlayer p_77621_2_, boolean p_77621_3_)
-@@ -646,7 +659,7 @@
-         float f1 = p_77621_2_.field_70127_C + (p_77621_2_.field_70125_A - p_77621_2_.field_70127_C) * f;
-         float f2 = p_77621_2_.field_70126_B + (p_77621_2_.field_70177_z - p_77621_2_.field_70126_B) * f;
-         double d0 = p_77621_2_.field_70169_q + (p_77621_2_.field_70165_t - p_77621_2_.field_70169_q) * (double)f;
--        double d1 = p_77621_2_.field_70167_r + (p_77621_2_.field_70163_u - p_77621_2_.field_70167_r) * (double)f + 1.62D - (double)p_77621_2_.field_70129_M;
-+        double d1 = p_77621_2_.field_70167_r + (p_77621_2_.field_70163_u - p_77621_2_.field_70167_r) * (double)f + (double)(p_77621_1_.field_72995_K ? p_77621_2_.func_70047_e() - p_77621_2_.getDefaultEyeHeight() : p_77621_2_.func_70047_e()); // isRemote check to revert changes to ray trace position due to adding the eye height clientside and player yOffset differences
-         double d2 = p_77621_2_.field_70166_s + (p_77621_2_.field_70161_v - p_77621_2_.field_70166_s) * (double)f;
-         Vec3 vec3 = Vec3.func_72443_a(d0, d1, d2);
-         float f3 = MathHelper.func_76134_b(-f2 * 0.017453292F - (float)Math.PI);
-@@ -656,6 +669,10 @@
-         float f7 = f4 * f5;
-         float f8 = f3 * f5;
+@@ -334,6 +339,10 @@
+         float f6 = f3 * f4;
+         float f7 = f2 * f4;
          double d3 = 5.0D;
-+        if (p_77621_2_ instanceof EntityPlayerMP)
++        if (p_77621_2_ instanceof net.minecraft.entity.player.EntityPlayerMP)
 +        {
-+            d3 = ((EntityPlayerMP)p_77621_2_).field_71134_c.getBlockReachDistance();
++            d3 = ((net.minecraft.entity.player.EntityPlayerMP)p_77621_2_).field_71134_c.getBlockReachDistance();
 +        }
-         Vec3 vec31 = vec3.func_72441_c((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+         Vec3 vec31 = vec3.func_72441_c((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
          return p_77621_1_.func_147447_a(vec3, vec31, p_77621_3_, !p_77621_3_, false);
      }
-@@ -711,6 +728,7 @@
-         this.field_77791_bV = p_94581_1_.func_94245_a(this.func_111208_A());
+@@ -371,11 +380,670 @@
+         return false;
      }
  
-+    @Deprecated
-     public Multimap func_111205_h()
++    @Deprecated // Use ItemStack sensitive version below.
+     public Multimap<String, AttributeModifier> func_111205_h()
      {
-         return HashMultimap.create();
-@@ -728,6 +746,591 @@
-         return this.field_111218_cA == null ? "MISSING_ICON_ITEM_" + field_150901_e.func_148757_b(this) + "_" + this.field_77774_bZ : this.field_111218_cA;
+         return HashMultimap.<String, AttributeModifier>create();
      }
  
 +    /* ======================================== FORGE START =====================================*/
 +    /**
 +     * ItemStack sensitive version of getItemAttributeModifiers
 +     */
-+    public Multimap getAttributeModifiers(ItemStack stack)
++    public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack)
 +    {
 +        return this.func_111205_h();
 +    }
@@ -141,17 +91,28 @@
 +    }
 +
 +    /**
++     * Allow the item one last chance to modify its name used for the
++     * tool highlight useful for adding something extra that can't be removed
++     * by a user in the displayed name, such as a mode of operation.
++     *
++     * @param item the ItemStack for the item.
++     * @param the name that will be displayed unless it is changed in this method.
++     */
++    public String getHighlightTip( ItemStack item, String displayName )
++    {
++        return displayName;
++    }
++
++    /**
 +     * This is called when the item is used, before the block is activated.
 +     * @param stack The Item Stack
 +     * @param player The Player that used the item
 +     * @param world The Current World
-+     * @param x Target X Position
-+     * @param y Target Y Position
-+     * @param z Target Z Position
++     * @param pos Target position
 +     * @param side The side of the target hit
 +     * @return Return true to prevent any further processing.
 +     */
-+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
++    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
 +    {
 +        return false;
 +    }
@@ -159,14 +120,14 @@
 +    /**
 +     * Metadata-sensitive version of getStrVsBlock
 +     * @param itemstack The Item Stack
-+     * @param block The block the item is trying to break
-+     * @param metadata The items current metadata
++     * @param state The block state
 +     * @return The damage strength
 +     */
-+    public float getDigSpeed(ItemStack itemstack, Block block, int metadata)
++    public float getDigSpeed(ItemStack itemstack, net.minecraft.block.state.IBlockState state)
 +    {
-+        return func_150893_a(itemstack, block);
++        return func_150893_a(itemstack, state.func_177230_c());
 +    }
++
 +
 +    protected boolean canRepair = true;
 +    /**
@@ -194,13 +155,11 @@
 +     * Note: In SMP, this is called on both client and server sides!
 +     *
 +     * @param itemstack The current ItemStack
-+     * @param X The X Position
-+     * @param Y The X Position
-+     * @param Z The X Position
++     * @param pos Block's position in world
 +     * @param player The Player that is wielding the item
 +     * @return True to prevent harvesting, false to continue as normal
 +     */
-+    public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player)
++    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
 +    {
 +        return false;
 +    }
@@ -233,29 +192,15 @@
 +    /**
 +     * Player, Render pass, and item usage sensitive version of getIconIndex.
 +     *
-+     * @param stack The item stack to get the icon for. (Usually this, and usingItem will be the same if usingItem is not null)
-+     * @param renderPass The pass to get the icon for, 0 is default.
++     * @param stack The item stack to get the icon for.
 +     * @param player The player holding the item
-+     * @param usingItem The item the player is actively using. Can be null if not using anything.
 +     * @param useRemaining The ticks remaining for the active item.
-+     * @return The icon index
++     * @return Null to use default model, or a custom ModelResourceLocation for the stage of use.
 +     */
-+    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
++    @SideOnly(Side.CLIENT)
++    public net.minecraft.client.resources.model.ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining)
 +    {
-+        return getIcon(stack, renderPass);
-+    }
-+
-+    /**
-+     * Returns the number of render passes/layers this item has.
-+     * Usually equates to ItemRenderer.renderItem being called for this many passes.
-+     * Does not get called unless requiresMultipleRenderPasses() is true;
-+     *
-+     * @param metadata The item's metadata
-+     * @return The number of passes to run.
-+     */
-+    public int getRenderPasses(int metadata)
-+    {
-+        return func_77623_v() ? 2 : 1;
++        return null;
 +    }
 +
 +    /**
@@ -332,7 +277,7 @@
 +     * @param entityItem The entity Item
 +     * @return Return true to skip any further update code.
 +     */
-+    public boolean onEntityItemUpdate(EntityItem entityItem)
++    public boolean onEntityItemUpdate(net.minecraft.entity.item.EntityItem entityItem)
 +    {
 +        return false;
 +    }
@@ -369,11 +314,12 @@
 +     * @param stack to render for
 +     * @param pass the multi-render pass
 +     * @return the icon
-+     */
++     * /
 +    public IIcon getIcon(ItemStack stack, int pass)
 +    {
-+        return func_77618_c(stack.func_77960_j(), pass);
++        return func_77618_c(stack.getMetadata(), pass);
 +    }
++    */
 +
 +    /**
 +     * Generates the base Random item for a specific instance of the chest gen,
@@ -384,7 +330,7 @@
 +     * @param original Original result registered with the chest gen hooks.
 +     * @return New values to use as the random item, typically this will be original
 +     */
-+    public WeightedRandomChestContent getChestGenBase(ChestGenHooks chest, Random rnd, WeightedRandomChestContent original)
++    public net.minecraft.util.WeightedRandomChestContent getChestGenBase(net.minecraftforge.common.ChestGenHooks chest, Random rnd, net.minecraft.util.WeightedRandomChestContent original)
 +    {
 +        if (this instanceof ItemEnchantedBook)
 +        {
@@ -400,28 +346,19 @@
 +     * Should this item, when held, allow sneak-clicks to pass through to the underlying block?
 +     *
 +     * @param world The world
-+     * @param x The X Position
-+     * @param y The X Position
-+     * @param z The X Position
++     * @param pos Block position in world
 +     * @param player The Player that is wielding the item
 +     * @return
 +     */
-+    public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player)
++    public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player)
 +    {
 +        return false;
 +    }
 +
 +    /**
 +     * Called to tick armor in the armor slot. Override to do something
-+     *
-+     * @param world
-+     * @param player
-+     * @param itemStack
 +     */
-+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
-+    {
-+
-+    }
++    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack){}
 +
 +    /**
 +     * Determines if the specific ItemStack can be placed in the specified armor slot.
@@ -460,12 +397,12 @@
 +
 +    /**
 +     * Called by RenderBiped and RenderPlayer to determine the armor texture that
-+     * should be use for the currently equiped item.
++     * should be use for the currently equipped item.
 +     * This will only be called on instances of ItemArmor.
 +     *
 +     * Returning null from this function will use the default value.
 +     *
-+     * @param stack ItemStack for the equpt armor
++     * @param stack ItemStack for the equipped armor
 +     * @param entity The entity wearing the armor
 +     * @param slot The slot the armor is in
 +     * @param type The subtype, can be null or "overlay"
@@ -484,7 +421,18 @@
 +     * @return A instance of FontRenderer or null to use default
 +     */
 +    @SideOnly(Side.CLIENT)
-+    public FontRenderer getFontRenderer(ItemStack stack)
++    public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack)
++    {
++        return null;
++    }
++
++    /**
++     * @deprecated Use 4-argument version.
++     */
++    // remove 1.9
++    @SideOnly(Side.CLIENT)
++    @Deprecated
++    public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
 +    {
 +        return null;
 +    }
@@ -495,13 +443,13 @@
 +     * @param  entityLiving  The entity wearing the armor
 +     * @param  itemStack  The itemStack to render the model of
 +     * @param  armorSlot  0=head, 1=torso, 2=legs, 3=feet
-+     *
++     * @param _default Original armor model. Will have attributes set.
 +     * @return  A ModelBiped to render instead of the default
 +     */
 +    @SideOnly(Side.CLIENT)
-+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
++    public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot, net.minecraft.client.model.ModelBiped _default)
 +    {
-+        return null;
++        return getArmorModel(entityLiving, itemStack, armorSlot);
 +    }
 +
 +    /**
@@ -524,12 +472,9 @@
 +     * @param player Reference to the current client entity
 +     * @param resolution Resolution information about the current viewport and configured GUI Scale
 +     * @param partialTicks Partial ticks for the renderer, useful for interpolation
-+     * @param hasScreen If the player has a screen up, which will be rendered after this.
-+     * @param mouseX Mouse's X position on screen
-+     * @param mouseY Mouse's Y position on screen
 +     */
 +    @SideOnly(Side.CLIENT)
-+    public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks, boolean hasScreen, int mouseX, int mouseY){}
++    public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, net.minecraft.client.gui.ScaledResolution resolution, float partialTicks){}
 +
 +    /**
 +     * Return the itemDamage represented by this ItemStack. Defaults to the itemDamage field on ItemStack, but can be overridden here for other sources such as NBT.
@@ -542,8 +487,12 @@
 +        return stack.field_77991_e;
 +    }
 +
-+    @Deprecated // This isn't 'display' its normal Damage, the above function is 'Aux' data, but the same value.
-+    public int getDisplayDamage(ItemStack stack)
++    /**
++     * This used to be 'display damage' but its really just 'aux' data in the ItemStack, usually shares the same variable as damage.
++     * @param stack
++     * @return
++     */
++    public int getMetadata(ItemStack stack)
 +    {
 +        return stack.field_77991_e;
 +    }
@@ -621,15 +570,6 @@
 +    }
 +
 +    /**
-+     * Render Pass sensitive version of hasEffect()
-+     */
-+    @SideOnly(Side.CLIENT)
-+    public boolean hasEffect(ItemStack par1ItemStack, int pass)
-+    {
-+        return func_77636_d(par1ItemStack) && (pass == 0 || this != Items.field_151068_bn);
-+    }
-+
-+    /**
 +     * Gets the maximum number of items that this stack should be able to hold.
 +     * This is a ItemStack (and thus NBT) sensitive version of Item.getItemStackLimit()
 +     *
@@ -641,7 +581,7 @@
 +        return this.func_77639_j();
 +    }
 +
-+    private HashMap<String, Integer> toolClasses = new HashMap<String, Integer>();
++    private java.util.Map<String, Integer> toolClasses = new java.util.HashMap<String, Integer>();
 +    /**
 +     * Sets or removes the harvest level for the specified tool class.
 +     *
@@ -661,7 +601,7 @@
 +            toolClasses.put(toolClass, level);
 +    }
 +
-+    public Set<String> getToolClasses(ItemStack stack)
++    public java.util.Set<String> getToolClasses(ItemStack stack)
 +    {
 +        return toolClasses.keySet();
 +    }
@@ -700,23 +640,106 @@
 +    {
 +        return this == Items.field_151166_bC || this == Items.field_151045_i || this == Items.field_151043_k || this == Items.field_151042_j;
 +    }
++
++
++    /**
++     * Determine if the player switching between these two item stacks
++     * @param oldStack The old stack that was equipped
++     * @param newStack The new stack
++     * @param slotChanged If the current equipped slot was changed,
++     *                    Vanilla does not play the animation if you switch between two
++     *                    slots that hold the exact same item.
++     * @return True to play the item change animation
++     */
++    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
++    {
++        return !ItemStack.func_77989_b(oldStack, newStack);
++    }
++
++
++    private ResourceLocation registryName = null;
++    /**
++     * Sets a unique name for this Item. This should be used for uniquely identify the instance of the Item.
++     * This is the valid replacement for the atrocious 'getUnlocalizedName().substring(6)' stuff that everyone does.
++     * Unlocalized names have NOTHING to do with unique identifiers. As demonstrated by vanilla blocks and items.
++     *
++     * The supplied name will be prefixed with the currently active mod's modId.
++     * If the supplied name already has a prefix that is different, it will be used and a warning will be logged.
++     *
++     * If a name already exists, or this Item is already registered in a registry, then an IllegalStateException is thrown.
++     *
++     * Returns 'this' to allow for chaining.
++     *
++     * @param name Unique registry name
++     * @return This instance
++     */
++    public final Item setRegistryName(String name)
++    {
++        if (getRegistryName() != null)
++            throw new IllegalStateException("Attempted to set registry name on block with exisiting registry name! New: " + name + " Old: " + getRegistryName());
++        int index = name.lastIndexOf(':');
++        String oldPrefix = index == -1 ? "" : name.substring(0, index);
++        name = index == -1 ? name : name.substring(index + 1);
++        net.minecraftforge.fml.common.ModContainer mc = net.minecraftforge.fml.common.Loader.instance().activeModContainer();
++        String prefix = mc == null ? "minecraft" : mc.getModId();
++        if (!oldPrefix.equals(prefix) && oldPrefix.length() > 0)
++        {
++            net.minecraftforge.fml.common.FMLLog.bigWarning("Dangerous alternative prefix %s for name %s, invalid registry invocation/invalid name?", oldPrefix, name);
++            prefix = oldPrefix;
++        }
++        this.registryName = new ResourceLocation(prefix, name);
++        return this;
++    }
++    public final Item setRegistryName(ResourceLocation name){ return setRegistryName(name.toString()); }
++    public final Item setRegistryName(String modID, String name){ return setRegistryName(modID + ":" + name); }
++
++    /**
++     * A unique identifier for this block, if this block is registered in the game registry it will return that name.
++     * Otherwise it will return the name set in setRegistryName().
++     * If neither are valid null is returned.
++     *
++     * @return Unique identifier or null.
++     */
++    public final String getRegistryName()
++    {
++        if (delegate.getResourceName() != null) return delegate.getResourceName().toString();
++        return registryName != null ? registryName.toString() : null;
++    }
++
++    /**
++     * Called from ItemStack.setItem, will hold extra data for the life of this ItemStack.
++     * Can be retrieved from stack.getCapabilities()
++     * The NBT can be null if this is not called from readNBT or if the item the stack is
++     * changing FROM is different then this item, or the previous item had no capabilities.
++     *
++     * This is called BEFORE the stacks item is set so you can use stack.getItem() to see the OLD item.
++     * Remember that getItem CAN return null.
++     *
++     * @param stack The ItemStack
++     * @param nbt NBT of this item serialized, or null.
++     * @return A holder instance associated with this ItemStack where you can hold capabilities for the life of this item.
++     */
++    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt)
++    {
++        return null;
++    }
 +    /* ======================================== FORGE END   =====================================*/
 +
-     public static enum ToolMaterial
+     public static void func_150900_l()
      {
-         WOOD(0, 59, 2.0F, 0.0F, 15),
-@@ -743,6 +1346,10 @@
- 
-         private static final String __OBFID = "CL_00000042";
+         func_179214_a(Blocks.field_150348_b, (new ItemMultiTexture(Blocks.field_150348_b, Blocks.field_150348_b, new Function<ItemStack, String>()
+@@ -855,6 +1523,10 @@
+         private final float field_78011_i;
+         private final int field_78008_j;
  
 +        //Added by forge for custom Tool materials.
-+        @Deprecated public Item customCraftingMaterial = null;
++        @Deprecated public Item customCraftingMaterial = null; // Remote in 1.8.1
 +        private ItemStack repairMaterial = null;
 +
          private ToolMaterial(int p_i1874_3_, int p_i1874_4_, float p_i1874_5_, float p_i1874_6_, int p_i1874_7_)
          {
              this.field_78001_f = p_i1874_3_;
-@@ -777,9 +1384,36 @@
+@@ -889,9 +1561,36 @@
              return this.field_78008_j;
          }
  

@@ -1,9 +1,6 @@
 package net.minecraftforge.test;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraftforge.client.EnumHelperClient;
 import net.minecraftforge.common.BiomeDictionary;
@@ -12,7 +9,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class EnumHelperTest
 {
@@ -38,7 +35,7 @@ public class EnumHelperTest
     }
     private void testType(Object[] info)
     {
-        Class<?> cls = (Class)info[0];
+        Class<?> cls = (Class<?>)info[0];
         Class<?>[] parameterTypes = new Class[info.length + 2 - 1];
         parameterTypes[0] = String.class;
         parameterTypes[1] = int.class;

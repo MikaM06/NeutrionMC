@@ -1,63 +1,64 @@
 --- ../src-base/minecraft/net/minecraft/client/renderer/entity/RendererLivingEntity.java
 +++ ../src-work/minecraft/net/minecraft/client/renderer/entity/RendererLivingEntity.java
-@@ -20,6 +20,9 @@
- import net.minecraft.util.ResourceLocation;
- import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
-+import net.minecraftforge.client.event.RenderLivingEvent;
-+import net.minecraftforge.common.MinecraftForge;
-+
- import org.lwjgl.opengl.GL11;
- import org.lwjgl.opengl.GL12;
- 
-@@ -32,6 +35,9 @@
-     protected ModelBase field_77046_h;
-     private static final String __OBFID = "CL_00001012";
+@@ -38,6 +38,9 @@
+     protected List<LayerRenderer<T>> field_177097_h = Lists.<LayerRenderer<T>>newArrayList();
+     protected boolean field_177098_i = false;
  
 +    public static float NAME_TAG_RANGE = 64.0f;
 +    public static float NAME_TAG_RANGE_SNEAK = 32.0f;
 +
-     public RendererLivingEntity(ModelBase p_i1261_1_, float p_i1261_2_)
+     public RendererLivingEntity(RenderManager p_i46156_1_, ModelBase p_i46156_2_, float p_i46156_3_)
      {
-         this.field_77045_g = p_i1261_1_;
-@@ -62,6 +68,7 @@
+         super(p_i46156_1_);
+@@ -83,10 +86,12 @@
  
-     public void func_76986_a(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
+     public void func_76986_a(T p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
      {
-+        if (MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Pre(p_76986_1_, this, p_76986_2_, p_76986_4_, p_76986_6_))) return;
-         GL11.glPushMatrix();
-         GL11.glDisable(GL11.GL_CULL_FACE);
++        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre(p_76986_1_, this, p_76986_2_, p_76986_4_, p_76986_6_))) return;
+         GlStateManager.func_179094_E();
+         GlStateManager.func_179129_p();
          this.field_77045_g.field_78095_p = this.func_77040_d(p_76986_1_, p_76986_9_);
-@@ -271,6 +278,7 @@
-         GL11.glEnable(GL11.GL_CULL_FACE);
-         GL11.glPopMatrix();
-         this.func_77033_b(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_);
-+        MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post(p_76986_1_, this, p_76986_2_, p_76986_4_, p_76986_6_));
+-        this.field_77045_g.field_78093_q = p_76986_1_.func_70115_ae();
++        boolean shouldSit = p_76986_1_.func_70115_ae() && (p_76986_1_.field_70154_o != null && p_76986_1_.field_70154_o.shouldRiderSit());
++        this.field_77045_g.field_78093_q = shouldSit;
+         this.field_77045_g.field_78091_s = p_76986_1_.func_70631_g_();
+ 
+         try
+@@ -95,7 +100,7 @@
+             float f1 = this.func_77034_a(p_76986_1_.field_70758_at, p_76986_1_.field_70759_as, p_76986_9_);
+             float f2 = f1 - f;
+ 
+-            if (p_76986_1_.func_70115_ae() && p_76986_1_.field_70154_o instanceof EntityLivingBase)
++            if (shouldSit && p_76986_1_.field_70154_o instanceof EntityLivingBase)
+             {
+                 EntityLivingBase entitylivingbase = (EntityLivingBase)p_76986_1_.field_70154_o;
+                 f = this.func_77034_a(entitylivingbase.field_70760_ar, entitylivingbase.field_70761_aq, p_76986_9_);
+@@ -191,6 +196,7 @@
+         {
+             super.func_76986_a(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
+         }
++        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(p_76986_1_, this, p_76986_2_, p_76986_4_, p_76986_6_));
      }
  
-     protected void func_77036_a(EntityLivingBase p_77036_1_, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float p_77036_7_)
-@@ -416,6 +424,7 @@
+     protected boolean func_177088_c(T p_177088_1_)
+@@ -469,10 +475,11 @@
  
-     protected void func_77033_b(EntityLivingBase p_77033_1_, double p_77033_2_, double p_77033_4_, double p_77033_6_)
+     public void func_177067_a(T p_177067_1_, double p_177067_2_, double p_177067_4_, double p_177067_6_)
      {
-+        if (MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Specials.Pre(p_77033_1_, this, p_77033_2_, p_77033_4_, p_77033_6_))) return;
-         GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
++        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Specials.Pre(p_177067_1_, this, p_177067_2_, p_177067_4_, p_177067_6_))) return;
+         if (this.func_177070_b(p_177067_1_))
+         {
+             double d0 = p_177067_1_.func_70068_e(this.field_76990_c.field_78734_h);
+-            float f = p_177067_1_.func_70093_af() ? 32.0F : 64.0F;
++            float f = p_177067_1_.func_70093_af() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
  
-         if (this.func_110813_b(p_77033_1_))
-@@ -423,7 +432,7 @@
-             float f = 1.6F;
-             float f1 = 0.016666668F * f;
-             double d3 = p_77033_1_.func_70068_e(this.field_76990_c.field_78734_h);
--            float f2 = p_77033_1_.func_70093_af() ? 32.0F : 64.0F;
-+            float f2 = p_77033_1_.func_70093_af() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
- 
-             if (d3 < (double)(f2 * f2))
+             if (d0 < (double)(f * f))
              {
-@@ -467,6 +476,7 @@
+@@ -518,6 +525,7 @@
                  }
              }
          }
-+        MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Specials.Post(p_77033_1_, this, p_77033_2_, p_77033_4_, p_77033_6_));
++        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Specials.Post(p_177067_1_, this, p_177067_2_, p_177067_4_, p_177067_6_));
      }
  
-     protected boolean func_110813_b(EntityLivingBase p_110813_1_)
+     protected boolean func_177070_b(T p_177070_1_)

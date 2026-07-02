@@ -3,7 +3,7 @@ package net.minecraftforge.classloading;
 import java.io.File;
 import java.util.Map;
 
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 public class FMLForgePlugin implements IFMLLoadingPlugin
 {
@@ -13,7 +13,7 @@ public class FMLForgePlugin implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] { "net.minecraftforge.classloading.FluidIdTransformer" };
+        return new String[0];
     }
 
     @Override
@@ -38,6 +38,6 @@ public class FMLForgePlugin implements IFMLLoadingPlugin
     @Override
     public String getAccessTransformerClass()
     {
-        return "net.minecraftforge.transformers.ForgeAccessTransformer";
+        return null;
     }
 }

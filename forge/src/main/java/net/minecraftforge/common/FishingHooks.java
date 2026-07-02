@@ -1,11 +1,10 @@
 package net.minecraftforge.common;
 
-import com.google.common.base.Predicate;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
+
+import com.google.common.base.Predicate;
 
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemStack;
@@ -43,19 +42,19 @@ public class FishingHooks
 
         if (chance < junkChance)
         {
-            return ((WeightedRandomFishable)WeightedRandom.getRandomItem(rand, junk)).func_150708_a(rand);
+            return ((WeightedRandomFishable)WeightedRandom.getRandomItem(rand, junk)).getItemStack(rand);
         }
 
         chance -= junkChance;
         if (chance < treasureChance)
         {
-            return ((WeightedRandomFishable)WeightedRandom.getRandomItem(rand, treasure)).func_150708_a(rand);
+            return ((WeightedRandomFishable)WeightedRandom.getRandomItem(rand, treasure)).getItemStack(rand);
         }
 
         chance -= treasureChance;
         // this is done in EntityFishHook.func_146033_f. more loot types expected?
         {
-            return ((WeightedRandomFishable)WeightedRandom.getRandomItem(rand, fish)).func_150708_a(rand);
+            return ((WeightedRandomFishable)WeightedRandom.getRandomItem(rand, fish)).getItemStack(rand);
         }
     }
 
@@ -93,15 +92,15 @@ public class FishingHooks
 
     static
     {
-        fish.addAll(EntityFishHook.field_146036_f);
-        junk.addAll(EntityFishHook.field_146039_d);
-        treasure.addAll(EntityFishHook.field_146041_e);
+        fish.addAll(EntityFishHook.FISH);
+        junk.addAll(EntityFishHook.JUNK);
+        treasure.addAll(EntityFishHook.TREASURE);
     }
 
     public static enum FishableCategory
     {
-        JUNK(StatList.field_151183_A),
-        TREASURE(StatList.field_151184_B),
+        JUNK(StatList.junkFishedStat),
+        TREASURE(StatList.treasureFishedStat),
         FISH(StatList.fishCaughtStat);
 
         public final StatBase stat;

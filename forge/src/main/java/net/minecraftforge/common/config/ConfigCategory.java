@@ -13,7 +13,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
+import net.minecraftforge.fml.client.config.GuiConfigEntries.IConfigEntry;
 
 public class ConfigCategory implements Map<String, Property>
 {
@@ -33,6 +32,7 @@ public class ConfigCategory implements Map<String, Property>
     private String languagekey;
     private ArrayList<ConfigCategory> children = new ArrayList<ConfigCategory>();
     private Map<String, Property> properties = new TreeMap<String, Property>();
+    @SuppressWarnings("unused")
     private int propNumber = 0;
     public final ConfigCategory parent;
     private boolean changed = false;

@@ -1,9 +1,9 @@
 package net.minecraftforge.event.brewing;
 
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.eventhandler.Cancelable;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.Event.HasResult;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event.HasResult;
 
 
 public class PotionBrewEvent extends Event
@@ -73,6 +73,7 @@ public class PotionBrewEvent extends Event
      * <br>
      * This event is fired on the {@link MinecraftForge#EVENT_BUS}.<br>
      **/
+    @SuppressWarnings("deprecation")
     public static class Post extends PotionBrewedEvent
     {
         public Post(ItemStack[] stacks)

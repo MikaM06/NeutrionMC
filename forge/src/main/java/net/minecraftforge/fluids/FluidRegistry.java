@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import net.minecraftforge.fml.common.LoaderState;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
@@ -11,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -18,15 +20,15 @@ import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.registry.RegistryDelegate;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.registry.RegistryDelegate;
 
 /**
  * Handles Fluid registrations. Fluids MUST be registered in order to function.
@@ -48,21 +50,22 @@ public abstract class FluidRegistry
     static BiMap<String,String> defaultFluidName = HashBiMap.create();
     static Map<Fluid,FluidDelegate> delegates = Maps.newHashMap();
 
-    public static final Fluid WATER = new Fluid("water") {
+    static boolean universalBucketEnabled = false;
+    static Set<Fluid> bucketFluids = Sets.newHashSet();
+
+    public static final Fluid WATER = new Fluid("water", new ResourceLocation("blocks/water_still"), new ResourceLocation("blocks/water_flow")) {
         @Override
-        public String getLocalizedName() {
+        public String getLocalizedName(FluidStack fs) {
             return StatCollector.translateToLocal("tile.water.name");
         }
     }.setBlock(Blocks.water).setUnlocalizedName(Blocks.water.getUnlocalizedName());
 
-    public static final Fluid LAVA = new Fluid("lava") {
+    public static final Fluid LAVA = new Fluid("lava", new ResourceLocation("blocks/lava_still"), new ResourceLocation("blocks/lava_flow")) {
         @Override
-        public String getLocalizedName() {
+        public String getLocalizedName(FluidStack fs) {
             return StatCollector.translateToLocal("tile.lava.name");
         }
     }.setBlock(Blocks.lava).setLuminosity(15).setDensity(3000).setViscosity(6000).setTemperature(1300).setUnlocalizedName(Blocks.lava.getUnlocalizedName());
-
-    public static int renderIdFluid = -1;
 
     static
     {
@@ -85,7 +88,8 @@ public abstract class FluidRegistry
     /**
      * Called by forge to load default fluid IDs from the world or from server -> client for syncing
      * DO NOT call this and expect useful behaviour.
-     * @param newfluidIDs
+     * @param localFluidIDs
+     * @param defaultNames
      */
     private static void loadFluidDefaults(BiMap<Fluid, Integer> localFluidIDs, Set<String> defaultNames)
     {
@@ -189,25 +193,26 @@ public abstract class FluidRegistry
         return fluids.get(fluidName);
     }
 
+    @Deprecated // Modders should never actually use int ID, use String
     public static Fluid getFluid(int fluidID)
     {
         return fluidIDs.inverse().get(fluidID);
     }
 
+    @Deprecated // Modders should never actually use int ID, use String
     public static int getFluidID(Fluid fluid)
     {
-        return fluidIDs.get(fluid);
+        Integer ret = fluidIDs.get(fluid);
+        if (ret == null) throw new RuntimeException("Attempted to access ID for unregistered fluid, Stop using this method modder!");
+        return ret;
     }
 
+    @Deprecated // Modders should never actually use int ID, use String
     public static int getFluidID(String fluidName)
     {
-        return fluidIDs.get(getFluid(fluidName));
-    }
-
-    @Deprecated //Remove in 1.8.3
-    public static String getFluidName(int fluidID)
-    {
-        return fluidNames.get(fluidID);
+        Integer ret = fluidIDs.get(getFluid(fluidName));
+        if (ret == null) throw new RuntimeException("Attempted to access ID for unregistered fluid, Stop using this method modder!");
+        return ret;
     }
 
     public static String getFluidName(Fluid fluid)
@@ -239,21 +244,64 @@ public abstract class FluidRegistry
 
     /**
      * Returns a read-only map containing Fluid Names and their associated IDs.
+     * Modders should never actually use this, use the String names.
      */
-    @Deprecated //Change return type to <Fluid, Integer> in 1.8.3
-    public static Map<String, Integer> getRegisteredFluidIDs()
-    {
-        return ImmutableMap.copyOf(fluidNames.inverse());
-    }
-
-    /**
-     * Returns a read-only map containing Fluid IDs and their associated Fluids.
-     * In 1.8.3, this will change to just 'getRegisteredFluidIDs'
-     */
-    public static Map<Fluid, Integer> getRegisteredFluidIDsByFluid()
+    @Deprecated
+    public static Map<Fluid, Integer> getRegisteredFluidIDs()
     {
         return ImmutableMap.copyOf(fluidIDs);
     }
+
+    /**
+     * Enables the universal bucket in forge.
+     * Has to be called before pre-initialization.
+     * Actually just call it statically in your mod class.
+     */
+    public static void enableUniversalBucket()
+    {
+        if (Loader.instance().hasReachedState(LoaderState.PREINITIALIZATION))
+        {
+            FMLLog.getLogger().log(Level.ERROR, "Trying to activate the universal filled bucket too late. Call it statically in your Mods class. Mod: {}", Loader.instance().activeModContainer().getName());
+        }
+        else
+        {
+            universalBucketEnabled = true;
+        }
+    }
+
+    public static boolean isUniversalBucketEnabled()
+    {
+        return universalBucketEnabled;
+    }
+
+    /**
+     * Registers a fluid with the universal bucket.
+     * This only has an effect if the universal bucket is enabled.
+     * @param fluid    The fluid that the bucket shall be able to hold
+     * @return True if the fluid was added successfully, false if it already was registered or couldn't be registered with the bucket.
+     */
+    public static boolean addBucketForFluid(Fluid fluid)
+    {
+        if(fluid == null) {
+            return false;
+        }
+        // register unregistered fluids
+        if (!isFluidRegistered(fluid))
+        {
+            registerFluid(fluid);
+        }
+        return bucketFluids.add(fluid);
+    }
+
+    /**
+     * All fluids registered with the universal bucket
+     * @return An immutable set containing the fluids
+     */
+    public static Set<Fluid> getBucketFluids()
+    {
+        return ImmutableSet.copyOf(bucketFluids);
+    }
+
 
     public static Fluid lookupFluidForBlock(Block block)
     {
@@ -381,6 +429,11 @@ public abstract class FluidRegistry
         public String name()
         {
             return name;
+        }
+
+        @Override
+        public ResourceLocation getResourceName() {
+            return new ResourceLocation(name);
         }
 
         @Override

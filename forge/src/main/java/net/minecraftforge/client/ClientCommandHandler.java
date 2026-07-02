@@ -12,17 +12,17 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CommandEvent;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.util.EnumChatFormatting;
 import static net.minecraft.util.EnumChatFormatting.*;
 
 /**
  * The class that handles client-side chat commands. You should register any
  * commands that you want handled on the client with this command handler.
- * 
+ *
  * If there is a command with the same name registered both on the server and
  * client, the client takes precedence!
- * 
+ *
  */
 public class ClientCommandHandler extends CommandHandler
 {
@@ -79,11 +79,11 @@ public class ClientCommandHandler extends CommandHandler
         }
         catch (WrongUsageException wue)
         {
-            sender.addChatMessage(format(RED, "commands.generic.usage", format(RED, wue.getMessage(), wue.getErrorOjbects())));
+            sender.addChatMessage(format(RED, "commands.generic.usage", format(RED, wue.getMessage(), wue.getErrorObjects())));
         }
         catch (CommandException ce)
         {
-            sender.addChatMessage(format(RED, ce.getMessage(), ce.getErrorOjbects()));
+            sender.addChatMessage(format(RED, ce.getMessage(), ce.getErrorObjects()));
         }
         catch (Throwable t)
         {
@@ -113,8 +113,7 @@ public class ClientCommandHandler extends CommandHandler
             Minecraft mc = FMLClientHandler.instance().getClient();
             if (mc.currentScreen instanceof GuiChat)
             {
-                @SuppressWarnings("unchecked")
-                List<String> commands = getPossibleCommands(mc.thePlayer, leftOfCursor);
+                List<String> commands = getTabCompletionOptions(mc.thePlayer, leftOfCursor, mc.thePlayer.getPosition());
                 if (commands != null && !commands.isEmpty())
                 {
                     if (leftOfCursor.indexOf(' ') == -1)

@@ -1,65 +1,51 @@
 --- ../src-base/minecraft/net/minecraft/world/SpawnerAnimals.java
 +++ ../src-work/minecraft/net/minecraft/world/SpawnerAnimals.java
-@@ -1,5 +1,7 @@
- package net.minecraft.world;
- 
-+import java.util.ArrayList;
-+import java.util.Collections;
- import java.util.HashMap;
- import java.util.Iterator;
- import java.util.List;
-@@ -17,6 +19,9 @@
- import net.minecraft.world.biome.BiomeGenBase;
- import net.minecraft.world.chunk.Chunk;
- 
-+import cpw.mods.fml.common.eventhandler.Event.Result;
-+import net.minecraftforge.event.ForgeEventFactory;
-+
- public final class SpawnerAnimals
- {
-     private HashMap field_77193_b = new HashMap();
-@@ -78,9 +83,12 @@
+@@ -69,14 +69,15 @@
              {
-                 EnumCreatureType enumcreaturetype = aenumcreaturetype[k3];
- 
--                if ((!enumcreaturetype.func_75599_d() || p_77192_3_) && (enumcreaturetype.func_75599_d() || p_77192_2_) && (!enumcreaturetype.func_82705_e() || p_77192_4_) && p_77192_1_.func_72907_a(enumcreaturetype.func_75598_a()) <= enumcreaturetype.func_75601_b() * this.field_77193_b.size() / 256)
-+                if ((!enumcreaturetype.func_75599_d() || p_77192_3_) && (enumcreaturetype.func_75599_d() || p_77192_2_) && (!enumcreaturetype.func_82705_e() || p_77192_4_) && p_77192_1_.countEntities(enumcreaturetype, true) <= enumcreaturetype.func_75601_b() * this.field_77193_b.size() / 256)
+                 if ((!enumcreaturetype.func_75599_d() || p_77192_3_) && (enumcreaturetype.func_75599_d() || p_77192_2_) && (!enumcreaturetype.func_82705_e() || p_77192_4_))
                  {
-                     Iterator iterator = this.field_77193_b.keySet().iterator();
-+                    ArrayList<ChunkCoordIntPair> tmp = new ArrayList(field_77193_b.keySet());
-+                    Collections.shuffle(tmp);
-+                    iterator = tmp.iterator();
-                     label110:
+-                    int j4 = p_77192_1_.func_72907_a(enumcreaturetype.func_75598_a());
++                    int j4 = p_77192_1_.countEntities(enumcreaturetype, true);
+                     int k4 = enumcreaturetype.func_75601_b() * i / field_180268_a;
  
-                     while (iterator.hasNext())
-@@ -158,13 +166,17 @@
+                     if (j4 <= k4)
+                     {
++                        java.util.ArrayList<ChunkCoordIntPair> shuffled = com.google.common.collect.Lists.newArrayList(this.field_77193_b);
++                        java.util.Collections.shuffle(shuffled);
+                         label374:
+-
+-                        for (ChunkCoordIntPair chunkcoordintpair1 : this.field_77193_b)
++                        for (ChunkCoordIntPair chunkcoordintpair1 : shuffled)
+                         {
+                             BlockPos blockpos = func_180621_a(p_77192_1_, chunkcoordintpair1.field_77276_a, chunkcoordintpair1.field_77275_b);
+                             int k1 = blockpos.func_177958_n();
+@@ -134,8 +135,10 @@
  
-                                                             entityliving.func_70012_b((double)f, (double)f1, (double)f2, p_77192_1_.field_73012_v.nextFloat() * 360.0F, 0.0F);
+                                                 entityliving.func_70012_b((double)f, (double)i3, (double)f1, p_77192_1_.field_73012_v.nextFloat() * 360.0F, 0.0F);
  
--                                                            if (entityliving.func_70601_bi())
-+                                                            Result canSpawn = ForgeEventFactory.canEntitySpawn(entityliving, p_77192_1_, f, f1, f2);
-+                                                            if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && entityliving.func_70601_bi()))
-                                                             {
-                                                                 ++i2;
-                                                                 p_77192_1_.func_72838_d(entityliving);
--                                                                ientitylivingdata = entityliving.func_110161_a(ientitylivingdata);
-+                                                                if (!ForgeEventFactory.doSpecialSpawn(entityliving, p_77192_1_, f, f1, f2))
-+                                                                {
-+                                                                    ientitylivingdata = entityliving.func_110161_a(ientitylivingdata);
-+                                                                }
+-                                                if (entityliving.func_70601_bi() && entityliving.func_70058_J())
++                                                net.minecraftforge.fml.common.eventhandler.Event.Result canSpawn = net.minecraftforge.event.ForgeEventFactory.canEntitySpawn(entityliving, p_77192_1_, f, i3, f1);
++                                                if (canSpawn == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW || (canSpawn == net.minecraftforge.fml.common.eventhandler.Event.Result.DEFAULT && (entityliving.func_70601_bi() && entityliving.func_70058_J())))
+                                                 {
++                                                    if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(entityliving, p_77192_1_, f, l3, f1))
+                                                     ientitylivingdata = entityliving.func_180482_a(p_77192_1_.func_175649_E(new BlockPos(entityliving)), ientitylivingdata);
  
--                                                                if (i2 >= entityliving.func_70641_bl())
-+                                                                if (j2 >= ForgeEventFactory.getMaxSpawnPackSize(entityliving))
-                                                                 {
-                                                                     continue label110;
-                                                                 }
-@@ -207,7 +219,8 @@
-         else
-         {
-             Block block = p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_ - 1, p_77190_4_);
--            return block != Blocks.field_150357_h && !p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_, p_77190_4_).func_149721_r() && !p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_, p_77190_4_).func_149688_o().func_76224_d() && !p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_ + 1, p_77190_4_).func_149721_r();
-+            boolean spawnBlock = block.canCreatureSpawn(p_77190_0_, p_77190_1_, p_77190_2_, p_77190_3_ - 1, p_77190_4_);
-+            return spawnBlock && block != Blocks.field_150357_h && !p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_, p_77190_4_).func_149721_r() && !p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_, p_77190_4_).func_149688_o().func_76224_d() && !p_77190_1_.func_147439_a(p_77190_2_, p_77190_3_ + 1, p_77190_4_).func_149721_r();
-         }
-     }
+                                                     if (entityliving.func_70058_J())
+@@ -144,7 +147,7 @@
+                                                         p_77192_1_.func_72838_d(entityliving);
+                                                     }
  
+-                                                    if (j2 >= entityliving.func_70641_bl())
++                                                    if (i2 >= net.minecraftforge.event.ForgeEventFactory.getMaxSpawnPackSize(entityliving))
+                                                     {
+                                                         continue label374;
+                                                     }
+@@ -193,7 +196,7 @@
+             {
+                 BlockPos blockpos = p_180267_2_.func_177977_b();
+ 
+-                if (!World.func_175683_a(p_180267_1_, blockpos))
++                if (!p_180267_1_.func_180495_p(blockpos).func_177230_c().canCreatureSpawn(p_180267_1_, blockpos, p_180267_0_))
+                 {
+                     return false;
+                 }

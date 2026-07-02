@@ -5,20 +5,18 @@
 
 package net.minecraftforge.common;
 
-import static net.minecraftforge.common.ForgeVersion.buildVersion;
-import static net.minecraftforge.common.ForgeVersion.majorVersion;
-import static net.minecraftforge.common.ForgeVersion.minorVersion;
-import static net.minecraftforge.common.ForgeVersion.revisionVersion;
+import static net.minecraftforge.common.config.Configuration.CATEGORY_CLIENT;
 import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.storage.SaveHandler;
@@ -28,6 +26,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.network.ForgeNetworkHandler;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.server.command.ForgeCommand;
@@ -36,28 +37,28 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-import cpw.mods.fml.client.FMLFileResourcePack;
-import cpw.mods.fml.client.FMLFolderResourcePack;
-import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import cpw.mods.fml.common.DummyModContainer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.LoadController;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.WorldAccessContainer;
-import cpw.mods.fml.common.event.FMLConstructionEvent;
-import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
-import cpw.mods.fml.common.event.FMLModIdMappingEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.client.FMLFileResourcePack;
+import net.minecraftforge.fml.client.FMLFolderResourcePack;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.DummyModContainer;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.LoadController;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.WorldAccessContainer;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLModIdMappingEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class ForgeModContainer extends DummyModContainer implements WorldAccessContainer
 {
+    public static final String VERSION_CHECK_CAT = "version_checking";
     public static int clumpingThreshold = 64;
     public static boolean removeErroringEntities = false;
     public static boolean removeErroringTileEntities = false;
@@ -70,8 +71,18 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
     public static boolean disableVersionCheck = false;
     public static int defaultSpawnFuzz = 20;
     public static boolean defaultHasSpawnFuzz = true;
+    public static boolean forgeLightPipelineEnabled = true;
+    public static boolean replaceVanillaBucketModel = true;
 
     private static Configuration config;
+    private static ForgeModContainer INSTANCE;
+    public static ForgeModContainer getInstance()
+    {
+        return INSTANCE;
+    }
+
+    private URL updateJSONUrl = null;
+    public UniversalBucket universalBucket;
 
     public ForgeModContainer()
     {
@@ -79,22 +90,26 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
         ModMetadata meta = getMetadata();
         meta.modId       = "Forge";
         meta.name        = "Minecraft Forge";
-        meta.version     = String.format("%d.%d.%d.%d", majorVersion, minorVersion, revisionVersion, buildVersion);
+        meta.version     = ForgeVersion.getVersion();
         meta.credits     = "Made possible with help from many people";
-        meta.authorList  = Arrays.asList("LexManos", "Eloraam", "Spacetoad");
+        meta.authorList  = Arrays.asList("LexManos", "cpw", "fry");
         meta.description = "Minecraft Forge is a common open source API allowing a broad range of mods " +
                            "to work cooperatively together. It allows many mods to be created without " +
                            "them editing the main Minecraft code.";
-        meta.url         = "http://MinecraftForge.net";
-        meta.updateUrl   = "http://MinecraftForge.net/forum/index.php/topic,5.0.html";
+        meta.url         = "http://minecraftforge.net";
         meta.screenshots = new String[0];
         meta.logoFile    = "/forge_logo.png";
+        try {
+            updateJSONUrl    = new URL("http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json");
+        } catch (MalformedURLException e) {}
 
         config = null;
         File cfgFile = new File(Loader.instance().getConfigDir(), "forge.cfg");
         config = new Configuration(cfgFile);
 
         syncConfig(true);
+
+        INSTANCE = this;
     }
 
     @Override
@@ -181,9 +196,9 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
             FMLLog.warning("Enabling removal of erroring Tile Entities - USE AT YOUR OWN RISK");
         }
 
-        //prop = config.get(Configuration.CATEGORY_GENERAL, "disableStitchedFileSaving", true);
-        //prop.comment = "Set this to just disable the texture stitcher from writing the 'debug.stitched_{name}.png file to disc. Just a small performance tweak. Default: true";
-        //disableStitchedFileSaving = prop.getBoolean(true);
+        prop = config.get(Configuration.CATEGORY_GENERAL, "disableStitchedFileSaving", true);
+        prop.comment = "Set this to just disable the texture stitcher from writing the '{name}_{mipmap}.png files to disc. Just a small performance tweak. Default: true";
+        disableStitchedFileSaving = prop.getBoolean(true);
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "fullBoundingBoxLadders", false);
         prop.comment = "Set this to true to check the entire entity's collision bounding box for ladders instead of just the block they are in. Causes noticable differences in mechanics so default is vanilla behavior. Default: false";
@@ -222,7 +237,28 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
         defaultHasSpawnFuzz = prop.getBoolean(Boolean.TRUE);
         propOrder.add(prop.getName());
 
+        prop = config.get(Configuration.CATEGORY_GENERAL, "forgeLightPipelineEnabled", Boolean.TRUE,
+                "Enable the forge block rendering pipeline - fixes the lighting of custom models.");
+        forgeLightPipelineEnabled = prop.getBoolean(Boolean.TRUE);
+        propOrder.add(prop.getName());
+
         config.setCategoryPropertyOrder(CATEGORY_GENERAL, propOrder);
+
+        propOrder = new ArrayList<String>();
+        prop = config.get(VERSION_CHECK_CAT, "Global", true, "Enable the entire mod update check system. This only applies to mods using the Forge system.");
+        propOrder.add("Global");
+
+        config.setCategoryPropertyOrder(VERSION_CHECK_CAT, propOrder);
+
+        // Client-Side only properties
+        propOrder = new ArrayList<String>();
+        prop = config.get(Configuration.CATEGORY_CLIENT, "replaceVanillaBucketModel", Boolean.FALSE,
+                "Replace the vanilla bucket models with Forges own dynamic bucket model. Unifies bucket visuals if a mod uses the Forge bucket model.");
+        prop.setLanguageKey("forge.configgui.replaceBuckets").setRequiresMcRestart(true);
+        replaceVanillaBucketModel = prop.getBoolean(Boolean.FALSE);
+        propOrder.add(prop.getName());
+
+        config.setCategoryPropertyOrder(CATEGORY_CLIENT, propOrder);
 
         if (config.hasChanged())
         {
@@ -248,13 +284,17 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
                 ForgeChunkManager.syncConfigDefaults();
                 ForgeChunkManager.loadConfiguration();
             }
+            else if (VERSION_CHECK_CAT.equals(event.configID))
+            {
+                syncConfig(false);
+            }
         }
     }
 
     @SubscribeEvent
     public void playerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-        UsernameCache.setUsername(event.player.getGameProfile().getId(), event.player.getGameProfile().getName());
+        UsernameCache.setUsername(event.player.getPersistentID(), event.player.getGameProfile().getName());
     }
 
     @Override
@@ -274,13 +314,23 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
     @Subscribe
     public void preInit(FMLPreInitializationEvent evt)
     {
+        CapabilityItemHandler.register();
         MinecraftForge.EVENT_BUS.register(MinecraftForge.INTERNAL_HANDLER);
         ForgeChunkManager.captureConfig(evt.getModConfigurationDirectory());
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
 
         if (!ForgeModContainer.disableVersionCheck)
         {
             ForgeVersion.startVersionCheck();
+        }
+
+        // Add and register the forge universal bucket, if it's enabled
+        if(FluidRegistry.isUniversalBucketEnabled())
+        {
+            universalBucket = new UniversalBucket();
+            universalBucket.setUnlocalizedName("forge.bucketFilled");
+            GameRegistry.registerItem(universalBucket, "bucketFilled");
+            MinecraftForge.EVENT_BUS.register(universalBucket);
         }
     }
 
@@ -326,7 +376,6 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
     @Subscribe
     public void mappingChanged(FMLModIdMappingEvent evt)
     {
-        Blocks.fire.rebuildFireInfo();
         OreDictionary.rebakeMap();
     }
 
@@ -390,5 +439,11 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
     {
         Certificate[] certificates = getClass().getProtectionDomain().getCodeSource().getCertificates();
         return certificates != null ? certificates[0] : null;
+    }
+
+    @Override
+    public URL getUpdateUrl()
+    {
+        return updateJSONUrl;
     }
 }

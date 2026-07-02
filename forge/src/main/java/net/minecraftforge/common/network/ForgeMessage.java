@@ -12,8 +12,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Sets;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 
 public abstract class ForgeMessage {
@@ -48,10 +48,11 @@ public abstract class ForgeMessage {
     public static class FluidIdMapMessage extends ForgeMessage {
         BiMap<Fluid, Integer> fluidIds = HashBiMap.create();
         Set<String> defaultFluids = Sets.newHashSet();
+        @SuppressWarnings("deprecation")
         @Override
         void toBytes(ByteBuf bytes)
         {
-            Map<Fluid, Integer> ids = FluidRegistry.getRegisteredFluidIDsByFluid();
+            Map<Fluid, Integer> ids = FluidRegistry.getRegisteredFluidIDs();
             bytes.writeInt(ids.size());
             for (Map.Entry<Fluid, Integer> entry : ids.entrySet())
             {

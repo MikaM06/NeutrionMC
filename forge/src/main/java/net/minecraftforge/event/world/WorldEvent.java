@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
-import cpw.mods.fml.common.eventhandler.Cancelable;
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * WorldEvent is fired when an event involving the world occurs.<br>
@@ -86,27 +87,27 @@ public class WorldEvent extends Event
 
     /**
      * Called by WorldServer to gather a list of all possible entities that can spawn at the specified location.
+     * If an entry is added to the list, it needs to be a globally unique instance.
+     * The event is called in WorldServer#getSpawnListEntryForTypeAt(EnumCreatureType, BlockPos) as well as
+     * WorldServer#canCreatureTypeSpawnHere(EnumCreatureType creatureType, BiomeGenBase.SpawnListEntry spawnListEntry, BlockPos pos)
+     * where the latter checks for identity, meaning both events must add the same instance.
      * Canceling the event will result in a empty list, meaning no entity will be spawned.
      */
     @Cancelable
     public static class PotentialSpawns extends WorldEvent
     {
         public final EnumCreatureType type;
-        public final int x;
-        public final int y;
-        public final int z;
+        public final BlockPos pos;
         public final List<SpawnListEntry> list;
 
-        public PotentialSpawns(World world, EnumCreatureType type, int x, int y, int z, List<SpawnListEntry> oldList)
+        public PotentialSpawns(World world, EnumCreatureType type, BlockPos pos, List<SpawnListEntry> oldList)
         {
             super(world);
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.pos = pos;
             this.type = type;
             if (oldList != null)
             {
-                this.list = oldList;
+                this.list = new ArrayList<SpawnListEntry>(oldList);
             }
             else
             {
@@ -123,10 +124,10 @@ public class WorldEvent extends Event
     public static class CreateSpawnPosition extends WorldEvent
     {
         public final WorldSettings settings;
-        public CreateSpawnPosition(World world, WorldSettings ws)
+        public CreateSpawnPosition(World world, WorldSettings settings)
         {
             super(world);
-            this.settings = ws;
+            this.settings = settings;
         }
     }
 }

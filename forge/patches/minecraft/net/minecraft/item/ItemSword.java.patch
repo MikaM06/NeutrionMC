@@ -10,4 +10,4 @@
 +        return super.func_82789_a(p_82789_1_, p_82789_2_);
      }
  
-     public Multimap func_111205_h()
+     public Multimap<String, AttributeModifier> func_111205_h()
