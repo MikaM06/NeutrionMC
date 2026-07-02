@@ -1,7 +1,7 @@
 package io.github.crucible.api;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.*;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.*;
 import io.github.crucible.CrucibleModContainer;
 import io.github.crucible.eventfactory.PluginClassLoaderFactory;
 import net.minecraftforge.common.MinecraftForge;

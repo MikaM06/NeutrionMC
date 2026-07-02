@@ -1,12 +1,12 @@
 package net.minecraft.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
-import org.bukkit.craftbukkit.v1_7_R4.command.CraftBlockCommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.command.CraftBlockCommandSender;
 
 // CraftBukkit - package-private -> public
 public class TileEntityCommandBlockListener extends CommandBlockLogic {

@@ -1,6 +1,6 @@
 package io.github.crucible.bootstrap;
 
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import java.net.URL;

@@ -87,7 +87,7 @@ public class RestartCommand extends Command {
                 }
                 System.out.println("Startup script '" + SpigotConfig.restartScript + "' does not exist! Stopping server.");
             }
-            cpw.mods.fml.common.FMLCommonHandler.instance().exitJava(0, false);
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().exitJava(0, false);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

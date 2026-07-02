@@ -1,7 +1,7 @@
 package net.minecraftforge.cauldron.inventory;
 
 import net.minecraft.inventory.Container;
-import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 

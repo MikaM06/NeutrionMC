@@ -1,6 +1,6 @@
 package io.github.crucible.bootstrap;
 
-import cpw.mods.fml.common.launcher.FMLTweaker;
+import net.minecraftforge.fml.common.launcher.FMLTweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import java.io.File;

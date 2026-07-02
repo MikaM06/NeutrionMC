@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 /**
  * Fixes a compilation bug of the java 8 compiler leading to the following exception at runtime:
- * cpw.mods.fml.common.LoaderException: java.lang.IncompatibleClassChangeError: Inconsistent constant pool data in
+ * net.minecraftforge.fml.common.LoaderException: java.lang.IncompatibleClassChangeError: Inconsistent constant pool data in
  * classfile for class com/gtnewhorizon/structurelib/alignment/IAlignmentLimits. Method 'boolean
  * lambda$static$0(net.minecraftforge.common.util.ForgeDirection,
  * com.gtnewhorizon.structurelib.alignment.enumerable.Rotation,

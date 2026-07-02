@@ -3,8 +3,8 @@ package io.github.crucible;
 import co.aikar.timings.Timing;
 import co.aikar.timings.Timings;
 import com.google.common.collect.MapMaker;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.IEventListener;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.IEventListener;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.Map;
