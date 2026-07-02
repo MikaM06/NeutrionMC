@@ -4,9 +4,9 @@
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
  
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryView; // CraftBukkit
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryAnvil;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView; // CraftBukkit
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryAnvil;
 +
  public class ContainerRepair extends Container
  {

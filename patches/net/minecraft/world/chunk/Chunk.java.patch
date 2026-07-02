@@ -32,8 +32,8 @@
 +import net.minecraft.entity.EntityLiving;
 +import net.minecraft.entity.EnumCreatureType;
 +import net.minecraft.entity.player.EntityPlayerMP;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftChunk;
-+import org.bukkit.craftbukkit.v1_7_R4.util.UnsafeList;
++import org.bukkit.craftbukkit.v1_8_R3.CraftChunk;
++import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 +// Spigot end
 +
  public class Chunk

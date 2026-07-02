@@ -6,10 +6,10 @@
  
 +// CraftBukkit start
 +import net.minecraft.entity.player.InventoryPlayer;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryDoubleChest;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryView;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryPlayer;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryDoubleChest;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryPlayer;
 +// CraftBukkit end
 +
  public class ContainerChest extends Container

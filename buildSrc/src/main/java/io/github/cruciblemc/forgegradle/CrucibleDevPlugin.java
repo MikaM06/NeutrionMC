@@ -97,7 +97,9 @@ public class CrucibleDevPlugin extends DevBasePlugin {
       task3.setFernFlower(delayedFile(Constants.FERNFLOWER));
       task3.setPatch(delayedFile(MCP_PATCH_DIR));
       task3.setAstyleConfig(delayedFile(ASTYLE_CFG));
-      task3.setDoesCache(false);
+      // Cache the decompile output: the 1.8.9 patch-rebasing workflow reruns this
+      // pipeline constantly and a full forgeflower pass costs ~10 minutes each time.
+      task3.setDoesCache(true);
       task3.dependsOn("downloadMcpTools", "deobfuscateJar");
     }
 

@@ -9,8 +9,8 @@
  import net.minecraft.world.chunk.Chunk;
  
 +// CraftBukkit start
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import org.bukkit.event.entity.EntityTargetEvent;
 +import org.bukkit.event.entity.SlimeSplitEvent;
 +import net.minecraft.entity.Entity;

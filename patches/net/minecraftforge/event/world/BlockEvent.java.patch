@@ -13,9 +13,9 @@
  import net.minecraftforge.common.util.BlockSnapshot;
  
 +// Cauldron start
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import net.minecraft.entity.player.EntityPlayerMP;
-+import org.bukkit.craftbukkit.v1_7_R4.block.CraftBlockState;
++import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlockState;
 +// Cauldron end
 +
  public class BlockEvent extends Event {

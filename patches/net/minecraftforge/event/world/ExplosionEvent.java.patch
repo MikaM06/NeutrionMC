@@ -4,9 +4,9 @@
  
  import java.util.List;
  
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftTNTPrimed;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftTNTPrimed;
 +import org.bukkit.event.entity.ExplosionPrimeEvent;
  import cpw.mods.fml.common.eventhandler.Cancelable;
  import cpw.mods.fml.common.eventhandler.Event;

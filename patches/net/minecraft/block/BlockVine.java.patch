@@ -17,7 +17,7 @@
 -import net.minecraftforge.common.ForgeHooks;
  import net.minecraftforge.common.IShearable;
  
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory; // CraftBukkit
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory; // CraftBukkit
 +
  public class BlockVine extends Block implements IShearable
  {

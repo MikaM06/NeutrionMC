@@ -16,8 +16,8 @@
 +import java.net.InetSocketAddress;
 +import net.minecraft.network.ServerStatusResponse;
 +import net.minecraft.util.ChatComponentText;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-+import org.bukkit.craftbukkit.v1_7_R4.util.CraftIconCache;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.util.CraftIconCache;
 +// CraftBukkit end
 +
  public class NetHandlerStatusServer implements INetHandlerStatusServer

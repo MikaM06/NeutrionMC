@@ -14,8 +14,8 @@
  import net.minecraftforge.event.ForgeEventFactory;
  
 +// CraftBukkit start
-+import org.bukkit.craftbukkit.v1_7_R4.util.LongHash;
-+import org.bukkit.craftbukkit.v1_7_R4.util.LongObjectHashMap;
++import org.bukkit.craftbukkit.v1_8_R3.util.LongHash;
++import org.bukkit.craftbukkit.v1_8_R3.util.LongObjectHashMap;
 +import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 +// CraftBukkit end
 +

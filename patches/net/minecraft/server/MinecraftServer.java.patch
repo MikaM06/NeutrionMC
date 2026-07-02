@@ -65,10 +65,10 @@
 +import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 +
 +import org.bukkit.World.Environment;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-+import org.bukkit.craftbukkit.v1_7_R4.util.ServerShutdownThread;
-+import org.bukkit.craftbukkit.v1_7_R4.util.Waitable;
-+import org.bukkit.craftbukkit.v1_7_R4.scoreboard.CraftScoreboardManager;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.util.ServerShutdownThread;
++import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
++import org.bukkit.craftbukkit.v1_8_R3.scoreboard.CraftScoreboardManager;
 +import org.bukkit.event.server.RemoteServerCommandEvent;
 +import org.bukkit.event.world.WorldSaveEvent;
 +import org.spigotmc.WatchdogThread;
@@ -87,7 +87,7 @@
 +
 +import org.bukkit.configuration.ConfigurationSection;
 +import org.bukkit.configuration.file.YamlConfiguration;
-+import org.bukkit.craftbukkit.v1_7_R4.block.CraftBlock;
++import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
 +// Cauldron end
 +
  public abstract class MinecraftServer implements ICommandSender, Runnable, IPlayerUsage

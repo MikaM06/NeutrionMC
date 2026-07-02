@@ -6,7 +6,7 @@
  
 +import io.github.crucible.CrucibleModContainer;
  import org.bukkit.command.defaults.EnchantCommand;
-+import org.bukkit.craftbukkit.v1_7_R4.enchantments.CraftEnchantment;
++import org.bukkit.craftbukkit.v1_8_R3.enchantments.CraftEnchantment;
  import org.bukkit.inventory.ItemStack;
  
  /**

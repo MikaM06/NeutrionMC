@@ -49,21 +49,21 @@
  
 +// CraftBukkit start
 +import net.minecraft.server.network.NetHandlerLoginServer;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftTravelAgent;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
-+import org.bukkit.craftbukkit.v1_7_R4.command.ColouredConsoleSender;
-+import org.bukkit.craftbukkit.v1_7_R4.command.ConsoleCommandCompleter;
-+import org.bukkit.craftbukkit.v1_7_R4.command.CraftRemoteConsoleCommandSender;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryPlayer;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.CraftTravelAgent;
++import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
++import org.bukkit.craftbukkit.v1_8_R3.command.ColouredConsoleSender;
++import org.bukkit.craftbukkit.v1_8_R3.command.ConsoleCommandCompleter;
++import org.bukkit.craftbukkit.v1_8_R3.command.CraftRemoteConsoleCommandSender;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryPlayer;
 +import org.bukkit.Bukkit;
 +import org.bukkit.GameMode;
 +import org.bukkit.Location;
 +import org.bukkit.TravelAgent;
-+import org.bukkit.craftbukkit.v1_7_R4.util.CraftChatMessage;
++import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 +import org.bukkit.entity.Player;
 +import org.bukkit.event.player.PlayerPortalEvent;
 +import org.bukkit.event.player.PlayerJoinEvent;

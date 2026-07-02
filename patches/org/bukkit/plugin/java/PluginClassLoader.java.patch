@@ -12,7 +12,7 @@
 +import net.minecraft.server.MinecraftServer;
 +import net.minecraftforge.cauldron.CauldronUtils;
 +
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 +import org.bukkit.plugin.PluginDescriptionFile;
 +import java.io.*;
 +import java.net.JarURLConnection;
@@ -86,13 +86,13 @@
 +        // configure default remapper settings
 +        boolean useCustomClassLoader = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.custom-class-loader", true);
 +        debug = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.debug", false);
-+        boolean remapNMS1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R4", true);
++        boolean remapNMS1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_8_R3", true);
 +        boolean remapNMS179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R3", true);
 +        boolean remapNMS172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_7_R1", true);
 +        boolean remapNMS164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_6_R3", true);
 +        boolean remapNMS152 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-nms-v1_5_R3", true);
 +        String remapNMSPre = MinecraftServer.cauldronConfig.getString("plugin-settings.default.remap-nms-pre", "false");
-+        boolean remapOBC1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R4", true);
++        boolean remapOBC1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_8_R3", true);
 +        boolean remapOBC179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R3", true);
 +        boolean remapOBC172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_7_R1", true);
 +        boolean remapOBC164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings.default.remap-obc-v1_6_R3", true);
@@ -108,13 +108,13 @@
 +        // plugin-specific overrides
 +        useCustomClassLoader = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".custom-class-loader", useCustomClassLoader, false);
 +        debug = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".debug", debug, false);
-+        remapNMS1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R4", remapNMS1710, false);
++        remapNMS1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_8_R3", remapNMS1710, false);
 +        remapNMS179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R3", remapNMS179, false);
 +        remapNMS172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_7_R1", remapNMS172, false);
 +        remapNMS164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_6_R3", remapNMS164, false);
 +        remapNMS152 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-nms-v1_5_R3", remapNMS152, false);
 +        remapNMSPre = MinecraftServer.cauldronConfig.getString("plugin-settings."+pluginName+".remap-nms-pre", remapNMSPre, false);
-+        remapOBC1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R4", remapOBC1710, false);
++        remapOBC1710 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_8_R3", remapOBC1710, false);
 +        remapOBC179 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R3", remapOBC179, false);
 +        remapOBC172 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_7_R1", remapOBC172, false);
 +        remapOBC164 = MinecraftServer.cauldronConfig.getBoolean("plugin-settings."+pluginName+".remap-obc-v1_6_R3", remapOBC164, false);
@@ -210,7 +210,7 @@
 +     */
 +    public static String getNativeVersion() {
 +        // see https://github.com/mbax/VanishNoPacket/blob/master/src/main/java/org/kitteh/vanish/compat/NMSManager.java
-+        if (CauldronUtils.deobfuscatedEnvironment()) return "v1_7_R4"; // support plugins in deobf environment
++        if (CauldronUtils.deobfuscatedEnvironment()) return "v1_8_R3"; // support plugins in deobf environment
 +        final String packageName = CraftServer.class.getPackage().getName();
 +        return packageName.substring(packageName.lastIndexOf('.')  + 1);
 +    }
@@ -230,7 +230,7 @@
 +        relocations.put("net.minecraft.server", "net.minecraft.server." + obfVersion);
 +
 +        // support for running 1.7.10 plugins in Cauldron dev
-+        if (CauldronUtils.deobfuscatedEnvironment() && obfVersion.equals("v1_7_R4"))
++        if (CauldronUtils.deobfuscatedEnvironment() && obfVersion.equals("v1_8_R3"))
 +        {
 +            jarMapping.loadMappings(
 +                    new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/"+obfVersion+"/cb2pkgmcp.srg"))),
@@ -255,7 +255,7 @@
 -        if (result == null) {
 -            if (checkGlobal) {
 -                result = loader.getClassByName(name);
-+            if (obfVersion.equals("v1_7_R4")) {
++            if (obfVersion.equals("v1_8_R3")) {
 +                jarMapping.loadMappings(
 +                        new BufferedReader(new InputStreamReader(loader.getClass().getClassLoader().getResourceAsStream("mappings/"+obfVersion+"/obf2numpkg.srg"))),
 +                        null, // no version relocation for obf
@@ -292,7 +292,7 @@
 +            jarMapping.packages.put("net/minecraft/util/org", "org");
 +
 +            if ((flags & F_REMAP_NMS1710) != 0) {
-+                loadNmsMappings(jarMapping, "v1_7_R4");
++                loadNmsMappings(jarMapping, "v1_8_R3");
 +            }
 +
 +            if ((flags & F_REMAP_NMS179) != 0) {
@@ -313,8 +313,8 @@
 +
 +            if ((flags & F_REMAP_OBC1710) != 0) {
 +                if (CauldronUtils.deobfuscatedEnvironment())
-+                    jarMapping.packages.put(org_bukkit_craftbukkit+"/v1_7_R4", org_bukkit_craftbukkit);
-+                else jarMapping.packages.put(org_bukkit_craftbukkit+"/v1_7_R4", org_bukkit_craftbukkit+"/"+getNativeVersion());
++                    jarMapping.packages.put(org_bukkit_craftbukkit+"/v1_8_R3", org_bukkit_craftbukkit);
++                else jarMapping.packages.put(org_bukkit_craftbukkit+"/v1_8_R3", org_bukkit_craftbukkit+"/"+getNativeVersion());
 +            }
 +
 +            if ((flags & F_REMAP_OBC179) != 0) {
@@ -349,7 +349,7 @@
 +                String obfVersion;
 +                switch (flags & F_REMAP_NMSPRE_MASK)
 +                {
-+                    case 0x17100000: obfVersion = "v1_7_R4"; break;
++                    case 0x17100000: obfVersion = "v1_8_R3"; break;
 +                    case 0x01790000: obfVersion = "v1_7_R3"; break;
 +                    case 0x01720000: obfVersion = "v1_7_R1"; break;
 +                    case 0x01640000: obfVersion = "v1_6_R3"; break;

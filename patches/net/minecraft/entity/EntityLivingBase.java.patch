@@ -29,14 +29,14 @@
 +import net.minecraft.nbt.NBTTagInt;
 +import net.minecraft.network.play.server.S28PacketEffect;
 +
-+import org.bukkit.craftbukkit.v1_7_R4.TrigMath;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
++import org.bukkit.craftbukkit.v1_8_R3.TrigMath;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 +import org.bukkit.event.entity.EntityDamageEvent;
 +import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 +import org.bukkit.event.entity.EntityRegainHealthEvent;
 +// CraftBukkit end
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack; // Cauldron
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack; // Cauldron
 +
 +import com.google.common.base.Function;
 +

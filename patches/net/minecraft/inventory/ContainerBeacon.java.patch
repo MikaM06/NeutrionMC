@@ -8,9 +8,9 @@
  import net.minecraft.item.ItemStack;
  import net.minecraft.tileentity.TileEntityBeacon;
  
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryView; // CraftBukkit
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryBeacon;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView; // CraftBukkit
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryBeacon;
 +
  public class ContainerBeacon extends Container
  {

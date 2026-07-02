@@ -4,7 +4,7 @@
  import net.minecraft.world.EnumDifficulty;
  import net.minecraft.world.World;
  
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 +import org.bukkit.event.entity.EntityTargetEvent; // CraftBukkit
 +
  public class EntitySpider extends EntityMob

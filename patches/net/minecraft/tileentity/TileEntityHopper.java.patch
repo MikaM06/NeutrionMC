@@ -7,9 +7,9 @@
 +// CraftBukkit start
 +import net.minecraft.entity.item.EntityMinecartHopper;
 +import net.minecraft.inventory.InventoryLargeChest;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftHumanEntity;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryDoubleChest;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryDoubleChest;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 +import org.bukkit.entity.HumanEntity;
 +import org.bukkit.event.inventory.InventoryMoveItemEvent;
 +import org.bukkit.event.inventory.InventoryPickupItemEvent;

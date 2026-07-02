@@ -15,7 +15,7 @@
  
 +
 +// CraftBukkit start
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import org.bukkit.event.entity.EntityExplodeEvent;
 +import org.bukkit.Location;
 +// CraftBukkit end

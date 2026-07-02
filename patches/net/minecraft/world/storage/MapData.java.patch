@@ -7,11 +7,11 @@
 +// CraftBukkit start
 +import java.util.UUID;
 +
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-+import org.bukkit.craftbukkit.v1_7_R4.map.CraftMapRenderer;
-+import org.bukkit.craftbukkit.v1_7_R4.map.CraftMapView;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
-+import org.bukkit.craftbukkit.v1_7_R4.map.RenderData;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.map.CraftMapRenderer;
++import org.bukkit.craftbukkit.v1_8_R3.map.CraftMapView;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
++import org.bukkit.craftbukkit.v1_8_R3.map.RenderData;
 +// CraftBukkit end
 +
  public class MapData extends WorldSavedData

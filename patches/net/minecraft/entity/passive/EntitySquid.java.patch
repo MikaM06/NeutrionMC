@@ -11,7 +11,7 @@
  import net.minecraft.util.MathHelper;
  import net.minecraft.world.World;
  
-+import org.bukkit.craftbukkit.v1_7_R4.TrigMath; // CraftBukkit
++import org.bukkit.craftbukkit.v1_8_R3.TrigMath; // CraftBukkit
 +
  public class EntitySquid extends EntityWaterMob
  {

@@ -6,8 +6,8 @@
  import net.minecraft.nbt.NBTTagCompound;
 +import net.minecraft.util.MathHelper;
  import net.minecraft.world.World;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
++import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 +import thermos.thermite.ThermiteRandom;
  
 +import java.util.Random;

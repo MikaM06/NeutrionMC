@@ -42,7 +42,7 @@
 +import org.bukkit.Server;
 +import org.bukkit.TravelAgent;
 +import org.bukkit.block.BlockFace;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftTravelAgent;
++import org.bukkit.craftbukkit.v1_8_R3.CraftTravelAgent;
 +import org.bukkit.entity.Hanging;
 +import org.bukkit.entity.LivingEntity;
 +import org.bukkit.entity.Painting;
@@ -52,10 +52,10 @@
 +import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 +import org.bukkit.event.vehicle.VehicleEnterEvent;
 +import org.bukkit.event.vehicle.VehicleExitEvent;
-+import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import org.bukkit.event.entity.EntityCombustEvent;
 +import org.bukkit.event.entity.EntityPortalEvent;
 +import org.bukkit.event.hanging.HangingBreakByEntityEvent;

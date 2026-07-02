@@ -24,8 +24,8 @@
 +// CraftBukkit start
 +import net.minecraft.init.Blocks;
 +
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 +import org.bukkit.event.block.Action;
 +
 +// CraftBukkit end
@@ -34,7 +34,7 @@
 +import net.minecraft.inventory.IInventory;
 +import net.minecraft.server.MinecraftServer;
 +
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryView;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 +import org.bukkit.event.inventory.InventoryType;
 +// Cauldron end
 +

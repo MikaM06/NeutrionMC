@@ -40,10 +40,10 @@
 +import net.minecraft.network.play.server.S2FPacketSetSlot;
 +
 +import org.bukkit.Bukkit;
-+import org.bukkit.craftbukkit.v1_7_R4.TrigMath;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftHumanEntity;
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftItem;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
++import org.bukkit.craftbukkit.v1_8_R3.TrigMath;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftItem;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 +import org.bukkit.entity.Player;
 +import org.bukkit.event.entity.EntityCombustByEntityEvent;
 +import org.bukkit.event.inventory.InventoryCloseEvent;

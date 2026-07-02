@@ -25,8 +25,8 @@
 +import net.minecraft.entity.player.EntityPlayerMP; // Spigot
 +// Cauldron start
 +
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 +// Cauldron end
 +
  public final class ItemStack

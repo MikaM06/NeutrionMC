@@ -4,7 +4,7 @@
  import net.minecraft.world.IBlockAccess;
  import net.minecraft.world.World;
  
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import org.bukkit.event.entity.EntityInteractEvent; // CraftBukkit
 +
  public class BlockRedstoneOre extends Block

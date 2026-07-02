@@ -4,8 +4,8 @@
  import net.minecraft.init.Blocks;
  import net.minecraft.util.MovingObjectPosition;
  import net.minecraft.world.World;
-+import org.bukkit.craftbukkit.v1_7_R4.block.CraftBlockState;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlockState;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
  
  public class ItemLilyPad extends ItemColored
  {

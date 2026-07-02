@@ -5,7 +5,7 @@
  import cpw.mods.fml.common.eventhandler.Event.Result;
  
 +// CraftBukkit start
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import org.bukkit.event.player.PlayerPickupItemEvent;
 +import net.minecraft.server.MinecraftServer;
 +// CraftBukkit end

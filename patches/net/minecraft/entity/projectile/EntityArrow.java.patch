@@ -17,8 +17,8 @@
 +// CraftBukkit start
 +import net.minecraft.entity.item.EntityItem;
 +
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftItem;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftItem;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 +import org.bukkit.entity.LivingEntity;
 +import org.bukkit.event.entity.EntityCombustByEntityEvent;
 +import org.bukkit.event.player.PlayerPickupItemEvent;

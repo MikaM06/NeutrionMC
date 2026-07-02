@@ -4,7 +4,7 @@
  import net.minecraft.entity.EntityLiving;
  import net.minecraft.entity.SharedMonsterAttributes;
  import net.minecraft.util.MathHelper;
-+import org.bukkit.craftbukkit.v1_7_R4.TrigMath;
++import org.bukkit.craftbukkit.v1_8_R3.TrigMath;
  
  public class EntityMoveHelper
  {

@@ -6,8 +6,8 @@
  
 +// CraftBukkit start
 +import net.minecraft.tileentity.TileEntityDispenser;
-+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
-+import org.bukkit.craftbukkit.v1_7_R4.projectiles.CraftBlockProjectileSource;
++import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
++import org.bukkit.craftbukkit.v1_8_R3.projectiles.CraftBlockProjectileSource;
 +import org.bukkit.event.block.BlockDispenseEvent;
 +// CraftBukkit end
 +

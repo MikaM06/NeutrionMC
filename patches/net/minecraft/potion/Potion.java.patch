@@ -6,8 +6,8 @@
  
 +// CraftBukkit start
 +import net.minecraft.entity.projectile.EntityPotion;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
-+import org.bukkit.craftbukkit.v1_7_R4.potion.CraftPotionEffectType;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.potion.CraftPotionEffectType;
 +import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 +// CraftBukkit end
 +

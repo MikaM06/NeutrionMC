@@ -43,8 +43,8 @@
 +import org.apache.logging.log4j.Level;
 +
 +import org.apache.logging.log4j.core.LoggerContext;
-+import org.bukkit.craftbukkit.v1_7_R4.util.ForwardLogHandler;
-+import org.bukkit.craftbukkit.v1_7_R4.util.TerminalConsoleWriterThread;
++import org.bukkit.craftbukkit.v1_8_R3.util.ForwardLogHandler;
++import org.bukkit.craftbukkit.v1_8_R3.util.TerminalConsoleWriterThread;
 +import org.bukkit.event.server.ServerCommandEvent;
 +// CraftBukkit end
 +

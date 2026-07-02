@@ -42,7 +42,7 @@
  import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
  import net.minecraftforge.event.world.ExplosionEvent;
  import net.minecraftforge.event.world.WorldEvent;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
  
 +//TODO: Crucible-There are a few hidden and weird cauldron/thermos protections, let's add a config file for those protections!
  public class ForgeEventFactory

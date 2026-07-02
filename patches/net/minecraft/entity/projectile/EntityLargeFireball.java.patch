@@ -11,7 +11,7 @@
  import net.minecraft.util.MovingObjectPosition;
  import net.minecraft.world.World;
  
-+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
++import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 +import org.bukkit.event.entity.ExplosionPrimeEvent; // CraftBukkit
 +
  public class EntityLargeFireball extends EntityFireball

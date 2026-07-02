@@ -5,7 +5,7 @@
  import net.minecraft.util.IIcon;
  import net.minecraft.world.World;
 -import net.minecraftforge.common.util.ForgeDirection;
-+import org.bukkit.craftbukkit.v1_7_R4.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
  
  public class BlockNetherWart extends BlockBush
  {
