@@ -84,7 +84,7 @@ public class CrucibleDevPlugin extends DevBasePlugin {
       task2.setSrg(delayedFile(JOINED_SRG));
       task2.setExceptorCfg(delayedFile(JOINED_EXC));
       task2.setExceptorJson(delayedFile(EXC_JSON));
-      task2.addTransformerClean(delayedFile(FML_RESOURCES + "/fml_at.cfg"));
+      // 1.8.9: fml_at.cfg was merged into forge_at.cfg (FML lives in the Forge repo now)
       task2.addTransformerClean(delayedFile(FORGE_RESOURCES + "/forge_at.cfg"));
       task2.setApplyMarkers(true);
       task2.dependsOn("downloadMcpTools", "mergeJars");

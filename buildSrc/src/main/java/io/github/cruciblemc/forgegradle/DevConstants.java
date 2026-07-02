@@ -43,7 +43,9 @@ public final class DevConstants {
   static final String ASTYLE_CFG = "{FML_CONF_DIR}/astyle.cfg";
   static final String EXC_JSON = "{FML_CONF_DIR}/exceptor.json";
   static final String MCP_PATCH = "{FML_CONF_DIR}/patches/minecraft_ff.patch";
-  static final String MCP_PATCH_DIR = "{FML_CONF_DIR}/patches/minecraft_ff";
+  // MCP 9.19 (1.8.9) ships three fernflower fixup sets; we decompile the merged
+  // client+server jar, so the merged set is the right one (minecraft_ff is client-only)
+  static final String MCP_PATCH_DIR = "{FML_CONF_DIR}/patches/minecraft_merged_ff";
   static final String MERGE_CFG = "{FML_DIR}/mcp_merge.cfg";
 
   // jars.

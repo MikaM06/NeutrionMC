@@ -33,6 +33,12 @@ apply plugin: 'crucible'
 apply plugin: 'maven-publish'
 
 repositories {
+    // Project-local repo: hosts net.minecraft:server:1.8.9 (mirrored from Mojang),
+    // which no public maven provides for this version.
+    maven {
+        name = "projectLocal"
+        url = uri("${rootProject.projectDir}/local-maven")
+    }
     maven {
         name = "juanmuscaria"
         url = "https://github.com/juanmuscaria/maven/raw/master"
